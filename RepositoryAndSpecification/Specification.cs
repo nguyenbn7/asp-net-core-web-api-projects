@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace GenericRepository;
+namespace Demo;
 
 // https://en.wikipedia.org/wiki/Specification_pattern
 public abstract class Specification<TEntity> where TEntity : class

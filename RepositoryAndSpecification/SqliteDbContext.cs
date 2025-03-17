@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace GenericRepository;
+namespace Demo;
 
 public sealed class SqliteDbContext(DbContextOptions<SqliteDbContext> options) : ApplicationDbContext(options)
 {

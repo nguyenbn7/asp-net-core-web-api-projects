@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace GenericRepository;
+namespace Demo;
 
 public abstract class ApplicationDbContext(DbContextOptions options) : DbContext(options)
 {

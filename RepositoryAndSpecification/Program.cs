@@ -1,5 +1,5 @@
 using System.Text.Json;
-using GenericRepository;
+using Demo;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

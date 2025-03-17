@@ -1,4 +1,4 @@
-namespace GenericRepository;
+namespace Demo;
 
 public interface IRepository<TEntity, TKey> where TEntity : class
 {

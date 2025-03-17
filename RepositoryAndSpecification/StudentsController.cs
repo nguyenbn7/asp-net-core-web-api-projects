@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace GenericRepository;
+namespace Demo;
 
 [ApiController]
 [Route("api/[controller]")]

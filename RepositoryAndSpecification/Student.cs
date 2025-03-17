@@ -1,4 +1,4 @@
-namespace GenericRepository;
+namespace Demo;
 
 public class Student
 {

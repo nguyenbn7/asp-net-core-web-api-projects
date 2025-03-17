@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace GenericRepository;
+namespace Demo;
 
 public sealed class Ordered<TEntity> where TEntity : class
 {

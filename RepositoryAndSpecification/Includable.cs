@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace GenericRepository;
+namespace Demo;
 
 public class Includable<TEntity> where TEntity : class
 {
