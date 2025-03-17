@@ -15,7 +15,23 @@ builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 builder.Services.AddScoped<DbContext, ApplicationDbContext>();
 builder.Services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
 {
-    optionsBuilder.UseSqlite(builder.Configuration.GetConnectionString("Conn"));
+    var connectionString = builder.Configuration.GetConnectionString("Sqlite");
+
+    if (!string.IsNullOrEmpty(connectionString))
+    {
+        optionsBuilder.UseSqlite(connectionString);
+        return;
+    }
+
+    connectionString = builder.Configuration.GetConnectionString("Psql");
+
+    if (!string.IsNullOrEmpty(connectionString))
+    {
+        optionsBuilder.UseNpgsql(connectionString);
+        return;
+    }
+
+    // ..... more provider after this
 });
 
 var app = builder.Build();
