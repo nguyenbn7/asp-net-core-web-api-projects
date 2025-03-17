@@ -1,0 +1,47 @@
+// Please change to appsettings[.Production|.Development].json and remove this comment
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  // Origins are required when environment is not development
+  "ORIGINS": ["https://host:port"],
+  // Images location cloud
+  "BASE_IMAGE_URL": "http(s)://localhost:5140",
+  "ConnectionStrings": {
+    // Sqlite only used for development
+    "sqlite": "Data Source=Your_database_name_here.sqlite3",
+    "postgre": "Host=my_host;Database=my_db;Username=my_user;Password=my_pw",
+    "redis": "localhost:6379"
+  },
+  "JWT": {
+    "Key": "This is where you put your secret key. Do not share with anyone",
+    "Issuer": "Your company name here"
+  },
+  "Stripe": {
+    "Endpoint Secret": "",
+    "Api key": ""
+  },
+  // This is not required to include to appsettings.json. Can safely remove belows
+  "IdentityOptions": {
+    "Password": {
+      "RequireDigit": true,
+      "RequireLowercase": true,
+      "RequireNonAlphanumeric": true,
+      "RequireUppercase": true,
+      "RequiredLength": 6,
+      "RequiredUniqueChars": 1
+    },
+    "Lockout": {
+      "DefaultLockoutTimeSpanMinutes": 5,
+      "MaxFailedAccessAttempts": 5,
+      "AllowedForNewUsers": false
+    },
+    "User": {
+      "AllowedUserNameCharacters": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+"
+    }
+  }
+}

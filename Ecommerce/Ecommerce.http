@@ -1,0 +1,113 @@
+@remote_api = ""
+@local_api = http://localhost:5140
+@base_api = {{local_api}}
+
+##### Product Api #####
+GET {{base_api}}/products
+Accept: application/json
+
+###
+GET {{base_api}}/products?pageNumber=1&pageSize=3&sort=-price&search=Boots
+Accept: application/json
+
+###
+GET {{base_api}}/product/brands
+Accept: application/json
+
+###
+GET {{base_api}}/products/100
+Accept: application/json
+
+##### Cart Api #####
+# @name cart
+POST {{base_api}}/carts
+Content-Type: application/json
+
+{
+    "items": [
+        {
+            "productId": 10,
+            "quantity": 1
+        }
+    ]
+}
+
+
+###
+@cartId = {{cart.response.body.id}}
+PUT {{base_api}}/carts/{{cartId}}
+Content-Type: application/json
+
+{
+    "items": [
+        {
+            "productId": 10,
+            "quantity": 1
+        },
+        {
+            "productId": 15,
+            "quantity": 2
+        }
+    ]
+}
+
+###
+GET {{base_api}}/carts/{{cartId}}
+
+###
+DELETE {{base_api}}/carts/{{cartId}}
+
+##### Order Api #####
+GET {{base_api}}/orders/delivery-methods
+
+###
+# @name order
+POST {{base_api}}/orders
+Content-Type: application/json
+
+{
+    "items": [
+        {
+            "productId": 1,
+            "quantity": 2
+        },
+        {
+            "productId": 17,
+            "quantity": 1
+        }
+    ],
+    "deliveryMethodId": 2,
+    "billing": {
+        "fullName": "John Doe",
+        "name": "John",
+        "phone": "999-999-9999",
+        "email": "john.doe@gmail.com",
+        "address": "123 ABC Street",
+        "address2": null,
+        "country": "USA",
+        "state": "Texas",
+        "city": "Dallas",
+        "zipCode": null
+    }
+}
+
+##### Account Api #####
+POST {{base_api}}/accounts/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "fullName": "string",
+  "displayName": "string",
+  "email": "user@example.com",
+  "password": "P@ssw0rd",
+  "confirmPassword": "P@ssw0rd"
+}
+
+###
+POST {{base_api}}/accounts/signin HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "P@ssw0rd"
+}
