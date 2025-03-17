@@ -483,3 +483,6 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 *.sqlite3*
+
+appsettings.json
+appsettings.*.json
