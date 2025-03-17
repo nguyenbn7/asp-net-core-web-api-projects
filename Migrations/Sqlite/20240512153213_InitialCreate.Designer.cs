@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace GenericRepository.Migrations
+namespace GenericRepository.Migrations.Sqlite
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240504151619_InitialCreate")]
+    [DbContext(typeof(SqliteDbContext))]
+    [Migration("20240512153213_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

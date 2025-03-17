@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace GenericRepository.Migrations
+namespace GenericRepository.Migrations.Sqlite
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

@@ -12,27 +12,28 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
-builder.Services.AddScoped<DbContext, ApplicationDbContext>();
-builder.Services.AddDbContext<ApplicationDbContext>(optionsBuilder =>
+
+var dbUsed = string.Empty;
+
+if (!string.IsNullOrEmpty(builder.Configuration.GetConnectionString("Sqlite")))
 {
-    var connectionString = builder.Configuration.GetConnectionString("Sqlite");
-
-    if (!string.IsNullOrEmpty(connectionString))
+    dbUsed = "sqlite";
+    builder.Services.AddDbContext<DbContext, SqliteDbContext>(optionsBuilder =>
     {
-        optionsBuilder.UseSqlite(connectionString);
-        return;
-    }
+        optionsBuilder.UseSqlite(builder.Configuration.GetConnectionString("Sqlite"));
+    });
+}
 
-    connectionString = builder.Configuration.GetConnectionString("Psql");
-
-    if (!string.IsNullOrEmpty(connectionString))
+if (!string.IsNullOrEmpty(builder.Configuration.GetConnectionString("Postgre")))
+{
+    dbUsed = "postgre";
+    builder.Services.AddDbContext<DbContext, PostgreDbContext>(optionsBuilder =>
     {
-        optionsBuilder.UseNpgsql(connectionString);
-        return;
-    }
+        optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("Postgre"));
+    });
+}
 
-    // ..... more provider after this
-});
+// ..... more provider after this. You can use extensions to wrap logic
 
 var app = builder.Build();
 
@@ -52,8 +53,12 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
 
     var logger = services.GetRequiredService<ILogger<Program>>();
-    var dbContext = services.GetRequiredService<ApplicationDbContext>();
-
+    ApplicationDbContext dbContext = dbUsed switch
+    {
+        "postgre" => services.GetRequiredService<PostgreDbContext>(),
+        "sqlite" => services.GetRequiredService<SqliteDbContext>(),
+        _ => services.GetRequiredService<ApplicationDbContext>(),
+    };
     try
     {
         await dbContext.Database.MigrateAsync();
@@ -68,7 +73,6 @@ using (var scope = app.Services.CreateScope())
                 await dbContext.SaveChangesAsync();
             }
         }
-
     }
     catch (Exception ex)
     {
