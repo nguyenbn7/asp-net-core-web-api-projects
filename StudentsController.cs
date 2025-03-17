@@ -11,13 +11,13 @@ public class StudentsController(IRepository<Student, int> studentRepository) : C
     [HttpGet]
     public async Task<ActionResult<List<Student>>> GetStudentsAsync()
     {
-        return await _studentRepository.GetAllAsync();
+        return await _studentRepository.FindAllAsync();
     }
 
     [HttpGet("{studentId}")]
     public async Task<ActionResult<Student?>> GetStudentAsync(int studentId)
     {
-        var student = await _studentRepository.GetByIdAsync(studentId);
+        var student = await _studentRepository.FindOneByPrimaryKeyAsync(studentId);
         if (student is null) return NotFound(new ErrorResponse
         {
             Code = ApplicationErrorCode.ENTITY_NOT_FOUND,
@@ -46,7 +46,7 @@ public class StudentsController(IRepository<Student, int> studentRepository) : C
     [HttpPut]
     public async Task<ActionResult> UpdateStudentAsync(Student updatedStudent)
     {
-        var student = await _studentRepository.GetByIdAsync(updatedStudent.Id);
+        var student = await _studentRepository.FindOneByPrimaryKeyAsync(updatedStudent.Id);
         if (student is null)
             return BadRequest(new ErrorResponse
             {

@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 
 namespace GenericRepository;
@@ -8,6 +7,12 @@ public class Repository<TEntity, TKey>(DbContext dbContext) : IRepository<TEntit
 {
     private readonly DbContext _dbContext = dbContext;
     private readonly DbSet<TEntity> _dbSet = dbContext.Set<TEntity>();
+
+    public Task<List<TEntity>> FindAllAsync() => _dbSet.AsNoTracking().ToListAsync();
+
+    public Task<List<TEntity>> FindAllAsync(Specification<TEntity> specification) => _dbSet.AsNoTracking()
+        .Where(specification.IsSatisfiedBy())
+        .ToListAsync();
 
     public Task<int> AddOrUpdateAsync(TEntity entity)
     {
@@ -21,12 +26,7 @@ public class Repository<TEntity, TKey>(DbContext dbContext) : IRepository<TEntit
         return _dbContext.SaveChangesAsync();
     }
 
-    public Task<List<TEntity>> GetAllAsync()
-    {
-        return _dbSet.AsNoTracking().ToListAsync();
-    }
-
-    public Task<TEntity?> GetByIdAsync(TKey key)
+    public Task<TEntity?> FindOneByPrimaryKeyAsync(TKey key)
     {
         var primaryKeyName = GetPrimaryKeyName();
         if (primaryKeyName is null)
@@ -42,11 +42,14 @@ public class Repository<TEntity, TKey>(DbContext dbContext) : IRepository<TEntit
         var left = Expression.Property(parameter, primaryKeyName);
         var right = Expression.Property(Expression.Constant(new { key }), nameof(key));
         var body = Expression.Equal(left, right);
+
         return Expression.Lambda<Func<TEntity, bool>>(body, parameter);
     }
 
-    private string? GetPrimaryKeyName()
-    {
-        return _dbSet.EntityType.FindPrimaryKey()?.Properties.Select(x => x.Name).Single();
-    }
+    private string? GetPrimaryKeyName() => _dbSet.EntityType.FindPrimaryKey()?.Properties
+        .Select(x => x.Name)
+        .Single();
+
+    public Task<TEntity?> FindOneAsync(Specification<TEntity> specification) => _dbSet.AsNoTracking()
+        .FirstOrDefaultAsync(specification.IsSatisfiedBy());
 }
