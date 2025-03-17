@@ -4,6 +4,8 @@
     "LogLevel": {
       "Default": "Information",
       "Microsoft.AspNetCore": "Warning"
+      // This will show the sql command in terminal. DO NOT USE IN PRODUCTION
+      // "Microsoft.EntityFrameworkCore.Database.Command": "Information"
     }
   },
   "AllowedHosts": "*",
