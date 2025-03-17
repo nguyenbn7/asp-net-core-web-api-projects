@@ -1,7 +1,6 @@
 namespace GenericRepository;
 
-public class Student
+public class StudentDTO
 {
-    public int Id { get; set; }
     public required string Name { get; set; }
 }
