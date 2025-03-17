@@ -14,6 +14,17 @@ public class Repository<TEntity, TKey>(DbContext dbContext) : IRepository<TEntit
         .Where(specification.IsSatisfiedBy())
         .ToListAsync();
 
+    public Task<List<TEntity>> FindAllAsync(Specification<TEntity> specification, Ordered<TEntity> ordered)
+    {
+        var query = _dbSet.AsNoTracking().Where(specification.IsSatisfiedBy());
+
+
+        query = ordered.Expressions.Aggregate(query,
+            (queryAcc, orderWrapper) => orderWrapper.Ascending ? queryAcc.OrderBy(orderWrapper.OrderExpression) : queryAcc.OrderByDescending(orderWrapper.OrderExpression));
+
+        return query.ToListAsync();
+    }
+
     public Task<int> AddOrUpdateAsync(TEntity entity)
     {
         _dbContext.Add(entity);
