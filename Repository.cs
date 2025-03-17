@@ -25,6 +25,29 @@ public class Repository<TEntity, TKey>(DbContext dbContext) : IRepository<TEntit
         return query.ToListAsync();
     }
 
+    public async Task<Page<TEntity>> FindAllAsync(Specification<TEntity> specification,
+                                            Ordered<TEntity> ordered,
+                                            Pageable pageable)
+    {
+        var query = _dbSet.AsNoTracking().Where(specification.IsSatisfiedBy());
+
+
+        query = ordered.Expressions.Aggregate(query,
+            (queryAcc, orderWrapper) => orderWrapper.Ascending ? queryAcc.OrderBy(orderWrapper.OrderExpression) : queryAcc.OrderByDescending(orderWrapper.OrderExpression));
+
+        var totalItems = await query.CountAsync();
+
+        query = query.Skip((pageable.PageNumber - 1) * pageable.PageSize).Take(pageable.PageSize);
+
+        return new Page<TEntity>()
+        {
+            PageNumber = pageable.PageNumber,
+            PageSize = pageable.PageSize,
+            TotalItems = totalItems,
+            Data = await query.ToListAsync()
+        };
+    }
+
     public Task<int> AddOrUpdateAsync(TEntity entity)
     {
         _dbContext.Add(entity);

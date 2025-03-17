@@ -5,6 +5,7 @@ public interface IRepository<TEntity, TKey> where TEntity : class
     Task<List<TEntity>> FindAllAsync();
     Task<List<TEntity>> FindAllAsync(Specification<TEntity> specification);
     Task<List<TEntity>> FindAllAsync(Specification<TEntity> specification, Ordered<TEntity> ordered);
+    Task<Page<TEntity>> FindAllAsync(Specification<TEntity> specification, Ordered<TEntity> ordered, Pageable pageable);
     Task<TEntity?> FindOneByPrimaryKeyAsync(TKey key);
     Task<TEntity?> FindOneAsync(Specification<TEntity> specification);
     /// <summary>

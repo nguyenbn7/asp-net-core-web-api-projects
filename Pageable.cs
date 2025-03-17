@@ -9,7 +9,7 @@ public sealed class Pageable
 
     public static Pageable Of(int pageNumber, int pageSize) => new()
     {
-        PageNumber = pageNumber,
-        PageSize = pageSize
+        PageNumber = pageNumber < 1 ? 1 : pageNumber,
+        PageSize = pageSize < 5 ? 5 : pageSize,
     };
 }
