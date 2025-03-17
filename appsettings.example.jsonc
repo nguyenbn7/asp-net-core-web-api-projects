@@ -1,0 +1,17 @@
+// This is structure of your settings. Please replace with your secret.
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    // More options see https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/connection-strings
+    "Sqlite": "Data Source=dev.sqlite3",
+    // More options see https://www.npgsql.org/doc/connection-string-parameters.html
+    "Psql": "Host=myserver;Username=mylogin;Password=mypass;Database=mydatabase"
+    // If you want to see more db like sqlsever or mysql. Please refer to each provider to get connection string.
+  }
+}
