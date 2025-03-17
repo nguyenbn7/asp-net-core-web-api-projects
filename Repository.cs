@@ -40,7 +40,7 @@ public class Repository<TEntity, TKey>(DbContext dbContext) : IRepository<TEntit
     {
         var parameter = Expression.Parameter(typeof(TEntity));
         var left = Expression.Property(parameter, primaryKeyName);
-        var right = Expression.Property(Expression.Constant(key), nameof(key));
+        var right = Expression.Property(Expression.Constant(new { key }), nameof(key));
         var body = Expression.Equal(left, right);
         return Expression.Lambda<Func<TEntity, bool>>(body, parameter);
     }
